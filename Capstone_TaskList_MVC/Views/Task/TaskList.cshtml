@@ -1,0 +1,105 @@
+﻿@model List<Capstone_TaskList_MVC.Models.Task>
+
+<h2>Task List</h2>
+
+@{
+    <br />
+    <div class="alert-danger">
+        <p>@TempData["Result"]</p>
+        <p>@ViewData["Result"]</p>
+    </div>
+}
+
+@{
+    <br />
+    <div>
+        <p>SearchDescription=@TempData["SearchDescription"]</p>
+        <p>SearchDate=@TempData["SearchDate"]</p>
+        <p>SearchCompleted=@TempData["SearchCompleted"]</p>
+        <p>SortByDate=@TempData["SortByDate"]</p>
+        <p>SortByCompleted=@TempData["SortByCompleted"]</p>
+    </div>
+    <br />
+    string SearchDateString = "";
+    @if (TempData["SearchDate"] != null)
+    {
+        DateTime SearchDate = DateTime.Parse("" + TempData["SearchDate"]);
+        SearchDateString = SearchDate.ToString("yyyy-MM-dd");
+    }
+
+    bool SortByDate = false;
+    @if (TempData["SortByDate"] != null && TempData["SortByDate"] != "")
+    {
+        SortByDate = TempData["SortByDate"].ToString().ToLower() == "true";
+    }
+
+    bool SortByCompleted = false;
+    @if (TempData["SortByCompleted"] != null && TempData["SortByCompleted"] != "")
+    {
+        SortByCompleted = TempData["SortByCompleted"].ToString().ToLower() == "true";
+    }
+}
+<!----------- SEARCH & SORT FORM ----------->
+<div style="background-color:aquamarine;">
+    <div><a href="/Task/AddTask">[ + Add Task ... ]</a></div>
+    <form action="/Task/FilterTaskList" method="post" class="form-row">
+        <table>
+            <tr>
+                <table>
+                    <tr>
+                        <th>Filter</th>
+                        <td>Description</td>
+                        <td>Task Date</td>
+                        <td>Completed</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input type="text" name="SearchDescription" placeholder="Task Description" value="@TempData["SearchDescription"]" /></td>
+                        <td><input type="date" name="SearchDate" value="@SearchDateString"></td>
+                        <td>
+                            <select name="SearchCompleted">
+                                <option value="ignore" selected> </option>
+                                <option value="true">Yes</option>
+                                <option value="false">No</option>
+                            </select>
+                        </td>
+                        <td><label>Task Date: @Html.CheckBox("SortByDate", SortByDate)</label></td>
+                        <td><label>Completed : @Html.CheckBox("SortByCompleted", SortByCompleted)</label></td>
+                    </tr>
+                </table>
+            </tr>
+        </table>
+        <input type="submit" value="Search" class="spinner-border" />
+    </form>
+</div>
+
+<!----------- TASK LIST ----------->
+@{
+    var count = 0;
+    @foreach (Capstone_TaskList_MVC.Models.Task task in Model)
+    {
+
+        @if (count++ % 2 == 0)
+        {
+            @Html.Raw("<span class=\"progress-bar-animated\">");
+        }
+        else
+        {
+            @Html.Raw("<span>");
+        }
+
+        <h3>@task.TaskDescription</h3>
+        <p>Due: @task.DueDate.ToString("yyyy-MM-dd")</p>
+        <p>Completed? @(task.CompletedStatus ? "completed" : "not completed")
+            <a href="/Task/MarkComplete?Id=@task.Id">Done!</a></p>
+        <p><form>
+                <a href="/Task/UpdateTask?Id=@task.Id">Edit</a>
+                <button asp-action="UpdateTask" asp-route-id="@task.Id">Edit</button>
+                |
+                <a href="/Task/DeleteTask?Id=@task.Id">Delete</a>
+                <button asp-action="DeleteTask" asp-route-id="@task.Id">Delete</button>
+            </form>
+        </p>
+        @Html.Raw("</span>");
+    }
+}

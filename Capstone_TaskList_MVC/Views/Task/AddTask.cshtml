@@ -1,0 +1,12 @@
+﻿<h2>Add Task</h2>
+<div>
+    <form action="/Task/AddTask" method="post" class="form">
+        <input type="text" name="TaskDescription" placeholder="Task Description" /><br />
+        <input type="date" name="DueDate" placeholder="DueDate" /><br />
+        <p>Completed :
+            <label>Yes <input type="radio" name="CompletedStatus" value="true" /></label>
+            <label>No <input type="radio" name="CompletedStatus" value="false" /></label>
+        </p>
+        <input type="submit" value="Add Task" />
+    </form>
+</div>

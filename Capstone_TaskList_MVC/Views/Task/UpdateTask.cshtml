@@ -1,0 +1,21 @@
+﻿
+@model Capstone_TaskList_MVC.Models.Task
+
+<h2>Update Task</h2>
+<div>
+    <form action="/Task/UpdateTask" method="post" class="form">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <input type="text" name="TaskDescription" value="@Model.TaskDescription" /><br />
+        <input type="date" name="DueDate" value="@Model.DueDate.ToString("yyyy-MM-dd")" /><br />
+        <p>
+            Completed :
+            @{ 
+                string checkedCompleted = Model.CompletedStatus ? "checked" : "";
+                string checkedIncomplete = Model.CompletedStatus == false ? "checked" : "";
+            }
+            <label>Yes <input type="radio" name="CompletedStatus" value="true" @checkedCompleted /></label>
+            <label>No <input type="radio" name="CompletedStatus" value="false" @checkedIncomplete /></label>
+        </p>
+        <input type="submit" value="Update Task" />
+    </form>
+</div>
