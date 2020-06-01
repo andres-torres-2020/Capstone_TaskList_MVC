@@ -11,14 +11,14 @@
 }
 
 @{
-    <br />
+    <!--br />
     <div>
         <p>SearchDescription=@TempData["SearchDescription"]</p>
         <p>SearchDate=@TempData["SearchDate"]</p>
         <p>SearchCompleted=@TempData["SearchCompleted"]</p>
         <p>SortByDate=@TempData["SortByDate"]</p>
         <p>SortByCompleted=@TempData["SortByCompleted"]</p>
-    </div>
+    </div-->
     <br />
     string SearchDateString = "";
     @if (TempData["SearchDate"] != null)
@@ -41,36 +41,46 @@
 }
 <!----------- SEARCH & SORT FORM ----------->
 <div style="background-color:aquamarine;">
-    <div><a href="/Task/AddTask">[ + Add Task ... ]</a></div>
-    <form action="/Task/FilterTaskList" method="post" class="form-row">
-        <table>
-            <tr>
-                <table>
-                    <tr>
-                        <th>Filter</th>
-                        <td>Description</td>
-                        <td>Task Date</td>
-                        <td>Completed</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><input type="text" name="SearchDescription" placeholder="Task Description" value="@TempData["SearchDescription"]" /></td>
-                        <td><input type="date" name="SearchDate" value="@SearchDateString"></td>
-                        <td>
-                            <select name="SearchCompleted">
-                                <option value="ignore" selected> </option>
-                                <option value="true">Yes</option>
-                                <option value="false">No</option>
-                            </select>
-                        </td>
-                        <td><label>Task Date: @Html.CheckBox("SortByDate", SortByDate)</label></td>
-                        <td><label>Completed : @Html.CheckBox("SortByCompleted", SortByCompleted)</label></td>
-                    </tr>
-                </table>
-            </tr>
-        </table>
-        <input type="submit" value="Search" class="spinner-border" />
-    </form>
+    <table>
+        <tr>
+            <td valign="middle"><a href="/Task/AddTask">[ + Add Task ... ]</a></td>
+            <td>
+                <form action="/Task/FilterTaskList" method="post">
+                    <table>
+                        <tr>
+                            <table>
+                                <tr>
+                                    <th>Filter</th>
+                                    <td>Description</td>
+                                    <td>Task Date</td>
+                                    <td>Completed</td>
+                                    <th>Order</th>
+                                    <td valign="middle"><label for="SortByDate">By Date</label></td>
+                                    <td valign="middle"><label for="SortByCompleted">By Completed</label></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><input type="text" name="SearchDescription" placeholder="Task Description" value="@TempData["SearchDescription"]" /></td>
+                                    <td><input type="date" name="SearchDate" value="@SearchDateString"></td>
+                                    <td>
+                                        <select name="SearchCompleted">
+                                            <option value="ignore" selected> </option>
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
+                                        </select>
+                                    </td>
+                                    <td></td>
+                                    <td>@Html.CheckBox("SortByDate", SortByDate)</td>
+                                    <td>@Html.CheckBox("SortByCompleted", SortByCompleted)</td>
+                                    <td><input type="submit" value="Search" class="spinner-border" /></td>
+                                </tr>
+                            </table>
+                        </tr>
+                    </table>
+                </form>
+            </td>
+        </tr>
+    </table>
 </div>
 
 <!----------- TASK LIST ----------->
@@ -90,13 +100,16 @@
 
         <h3>@task.TaskDescription</h3>
         <p>Due: @task.DueDate.ToString("yyyy-MM-dd")</p>
-        <p>Completed? @(task.CompletedStatus ? "completed" : "not completed")
-            <a href="/Task/MarkComplete?Id=@task.Id">Done!</a></p>
-        <p><form>
-                <a href="/Task/UpdateTask?Id=@task.Id">Edit</a>
+        <p>
+            Completed? @(task.CompletedStatus ? "completed" : "not completed")
+            <a href="/Task/MarkComplete?Id=@task.Id">Done!</a>
+        </p>
+        <p>
+            <form>
+                <!--a href="/Task/UpdateTask?Id=@task.Id">Edit</a-->
                 <button asp-action="UpdateTask" asp-route-id="@task.Id">Edit</button>
                 |
-                <a href="/Task/DeleteTask?Id=@task.Id">Delete</a>
+                <!--a href="/Task/DeleteTask?Id=@task.Id">Delete</a-->
                 <button asp-action="DeleteTask" asp-route-id="@task.Id">Delete</button>
             </form>
         </p>
